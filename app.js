@@ -171,35 +171,24 @@ const display_rating = (rating, cls) => {
     full = roundRating;
   }
   let empty = 5 - roundRating;
-  console.log(full);
-  console.log(half);
-  console.log(empty);
-  console.log("hsidfhsdhofhsdofih");
   const rating_component = document.createElement("div");
   rating_component.classList += cls;
   let i;
   for (i = 0; i < full; i++) {
     const span_component = document.createElement("span");
-    span_component.classList += "fa";
-    span_component.classList += "fa-star";
-    span_component.classList += "checked";
+    span_component.classList += "fa fa-star checked";
     rating_component.appendChild(span_component);
   }
   if (half != 0) {
     const span_component = document.createElement("span");
-    span_component.classList += "fa";
-    span_component.classList += "fa-star-half-full";
+    span_component.classList += "fa fa-star-half-full";
     rating_component.appendChild(span_component);
   }
   for (i = 0; i < empty; i++) {
     const span_component = document.createElement("span");
-    span_component.classList += "fa";
-    span_component.classList += "fa-star-o";
+    span_component.classList += "fa fa-star-o";
     rating_component.appendChild(span_component);
   }
-  const la = document.createElement("p");
-  la.innerHTML = "asdsad120120/*/*/";
-  rating_component.appendChild(la);
   return rating_component;
 };
 
