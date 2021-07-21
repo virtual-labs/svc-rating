@@ -1,9 +1,12 @@
 "use_strict";
 
 const modal_div = document.createElement("div");
-const image_container = document.createElement("div");
+// const image_container = document.createElement("div");
 let b64 = "";
 let lab_data = {};
+
+let expRating = 4.44;
+let compRating = 5;
 
 async function postData(url = "", data = {}) {
   const response = await fetch(url, {
@@ -78,6 +81,17 @@ const create_checkbox = (id, custom_label) => {
   return [label, checkbox];
 };
 
+const create_star = (id, value) => {
+  const star = document.createElement("input");
+  star.type = "radio";
+  star.name = "stars";
+  star.id = id;
+
+  const label = document.createElement("label");
+  label.htmlFor = id;
+  return [star, label];
+};
+
 const create_button = () => {
   const button = document.createElement("button");
   button.id = "submit";
@@ -106,80 +120,155 @@ const create_button = () => {
   return button;
 };
 
-const create_text_field = () => {
-  const tf = document.createElement("textarea");
-  tf.cols = 50;
-  tf.rows = 10;
-  tf.id = "bug-description";
-  tf.placeholder = "Please enter bug description if any";
-  return tf;
-};
-
-// const add_deps = () => {
-//   const link = document.createElement("link");
-//   link.rel = "stylesheet";
-//   link.type = "text/css";
-//   link.href = "./app.css";
-//   document.head.appendChild(link);
-//   const script = document.createElement("script");
-//   script.src =
-//     "https://rawcdn.githack.com/vjspranav/vleads-bug-report/2def0aae0804156d78c5aa24a8e7101c704a2dbf/client/html2canvas.js";
-//   document.head.appendChild(script);
+// const create_text_field = () => {
+//   const tf = document.createElement("textarea");
+//   tf.cols = 50;
+//   tf.rows = 10;
+//   tf.id = "bug-description";
+//   tf.placeholder = "Please enter bug description if any";
+//   return tf;
 // };
+
+const add_deps = () => {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.type = "text/css";
+  link.href =
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+  document.head.appendChild(link);
+  const script = document.createElement("script");
+  script.src =
+    "https://rawcdn.githack.com/vjspranav/vleads-bug-report/2def0aae0804156d78c5aa24a8e7101c704a2dbf/client/html2canvas.js";
+  document.head.appendChild(script);
+};
 
 const add_modal_box = () => {
   modal_div.classList += "modal";
   document.getElementById("rating").appendChild(modal_div);
 };
 
+const roundHalf = (num) => {
+  return Math.round(num * 2) / 2;
+};
+
+const isHalf = (num) => {
+  if (num % 1 == 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const display_rating = (rating, cls) => {
+  let roundRating = roundHalf(rating);
+  let full;
+  let half = 0;
+  if (isHalf(roundRating)) {
+    roundRating = Math.round(roundRating);
+    full = roundRating - 1;
+    half = 1;
+  } else {
+    full = roundRating;
+  }
+  let empty = 5 - roundRating;
+  console.log(full);
+  console.log(half);
+  console.log(empty);
+  console.log("hsidfhsdhofhsdofih");
+  const rating_component = document.createElement("div");
+  rating_component.classList += cls;
+  let i;
+  for (i = 0; i < full; i++) {
+    const span_component = document.createElement("span");
+    span_component.classList += "fa";
+    span_component.classList += "fa-star";
+    span_component.classList += "checked";
+    rating_component.appendChild(span_component);
+  }
+  if (half != 0) {
+    const span_component = document.createElement("span");
+    span_component.classList += "fa";
+    span_component.classList += "fa-star-half-full";
+    rating_component.appendChild(span_component);
+  }
+  for (i = 0; i < empty; i++) {
+    const span_component = document.createElement("span");
+    span_component.classList += "fa";
+    span_component.classList += "fa-star-o";
+    rating_component.appendChild(span_component);
+  }
+  const la = document.createElement("p");
+  la.innerHTML = "asdsad120120/*/*/";
+  rating_component.appendChild(la);
+  return rating_component;
+};
+
 const populate_modal = () => {
   const modal_content = document.createElement("div");
   modal_content.classList += "modal-content";
   const close_button = document.createElement("span");
-  const [ss_checkbox, ss_label] = create_checkbox(
-    "ss-chkbox",
-    "Add image to bug report"
-  );
-  const tf = create_text_field();
+
+  // const tf = create_text_field();
   close_button.innerHTML = "&times;";
   close_button.classList += "close";
   close_button.onclick = () => {
     modal_div.style.display = "none";
   };
   let data = document.createElement("p");
-  data.innerHTML = "This will be your bug report";
+  data.innerHTML = "Rate the experiment component!";
   modal_content.appendChild(close_button);
   modal_content.appendChild(data);
   modal_div.appendChild(modal_content);
-  modal_content.appendChild(ss_checkbox);
-  modal_content.appendChild(ss_label);
-  image_container.id = "image-cotainer";
-  modal_content.appendChild(image_container);
-  modal_content.appendChild(tf);
+  // modal_content.appendChild(ss_checkbox);
+  // modal_content.appendChild(ss_label);
+  // image_container.id = "image-cotainer";
+  // modal_content.appendChild(image_container);
+  // modal_content.appendChild(tf);
+  const star_div = document.createElement("div");
+  star_div.classList += "star-div";
+  const starIDs = ["star-a", "star-b", "star-c", "star-d", "star-e"];
+  const starValues = ["5", "4", "3", "2", "1"];
+  let i;
+  for (i = 0; i < 5; i++) {
+    const [star, label] = create_star(starIDs[i], starValues[i]);
+    star_div.appendChild(star);
+    star_div.appendChild(label);
+  }
+  modal_content.appendChild(star_div);
   modal_content.appendChild(create_button());
 };
 
-const add_button = () => {
+const add_display_box = () => {
   const button_div = document.getElementById("rating");
+  const component_rating_div = display_rating(compRating, "component-rating");
+  const experiment_rating_div = display_rating(expRating, "experiment-rating");
+  const experiment_heading = document.createElement("h3");
+  experiment_heading.innerHTML = "Experiment Rating";
+  button_div.appendChild(experiment_heading);
+  button_div.appendChild(experiment_rating_div);
+  const component_heading = document.createElement("h3");
+  component_heading.innerHTML = "Component Rating";
+  button_div.appendChild(component_heading);
+  button_div.appendChild(component_rating_div);
   const button = document.createElement("button");
   button.id = "rating-button";
-  button.innerHTML = "Report Bug";
+  button.innerHTML = "Rate this component";
   button_div.appendChild(button);
   button.onclick = () => {
-    var canvas = document.createElement("canvas");
-    // canvas.scale = 0.3;
-    var opts = {
-      // canvas: canvas,
-      logging: true,
-      useCORS: true,
-    };
-    html2canvas(document.body, opts).then(function (canvas) {
-      canvas.id = "image-canva";
-      image_container.innerHTML = "";
-      image_container.appendChild(canvas);
-      let dataURL = canvas.toDataURL();
-      b64 = dataURL.split(",")[1];
-    });
+    // var canvas = document.createElement("canvas");
+    // // canvas.scale = 0.3;
+    // var opts = {
+    //   // canvas: canvas,
+    //   logging: true,
+    //   useCORS: true,
+    // };
+    // html2canvas(document.body, opts).then(function (canvas) {
+    //   canvas.id = "image-canva";
+    //   image_container.innerHTML = "";
+    //   image_container.appendChild(canvas);
+    //   let dataURL = canvas.toDataURL();
+    //   b64 = dataURL.split(",")[1];
+    // });
     modal_div.style.display = "block";
     get_lab_data();
     console.log(lab_data);
@@ -192,7 +281,7 @@ window.onclick = function (event) {
   }
 };
 
-// add_deps();
+add_deps();
 add_modal_box();
-add_button();
+add_display_box();
 populate_modal();
