@@ -1,40 +1,27 @@
-#first {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: medium;
-  font-style: oblique;
-  background: #00a3b5;
-}
-
+#submit-button,
 #rating-button,
-.button {
-  width: 130px;
-  height: 30px;
-  border-radius: 50px;
-  background-color: #f50057;
-  color: white;
+#cancel-button {
+  border: none;
+  color: #ffffff;
+  background-color: #288ec8;
   text-align: center;
-  border: 0;
-  transition: all 0.3s ease 0s;
-}
-
-.button {
-  background-color: #2196f3;
-  margin-top: 1rem;
-}
-
-.button:hover {
-  background-color: #1769aa;
+  font-size: 1.05rem;
+  border-radius: 1em;
+  padding: 0.6em 1.2em;
   cursor: pointer;
 }
 
-#rating-button:hover {
-  background-color: #ab003c;
+#cancel-button {
+  background-color: grey;
 }
 
-.button,
-#rating-button:active {
-  transform: scale(0.98);
-  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+#cancel-button:hover {
+  background-color: #888;
+}
+
+#rating-button:hover,
+#submit-button:hover {
+  background-color: #a9a9a9;
 }
 
 .modal {
@@ -48,22 +35,26 @@
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  justify-content: center;
+  align-items: center;
 }
 
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
-  margin-top: 100px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 14px;
 }
 
 /* The Close Button */
 .close {
   color: #aaaaaa;
-  float: right;
   font-size: 28px;
   font-weight: bold;
 }
@@ -118,6 +109,7 @@
   width: 160px;
   flex-direction: row-reverse;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .fa {
@@ -126,4 +118,19 @@
 
 .component-rating {
   margin-bottom: 1rem;
+}
+
+.rating-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rating-header > img {
+  height: 48px;
+}
+
+#submit-button {
+  margin-right: 1rem;
 }

@@ -5,8 +5,10 @@ const modal_div = document.createElement("div");
 let b64 = "";
 let lab_data = {};
 
-let expRating = 4.44;
-let compRating = 5;
+let expRating = 2.44;
+let compRating = 1.3;
+let labRating = 3.6;
+let ratingValue;
 
 async function postData(url = "", data = {}) {
   const response = await fetch(url, {
@@ -68,19 +70,6 @@ const get_lab_data = () => {
   lab_data["expName"] = dataLayer[0]["expName"];
 };
 
-const create_checkbox = (id, custom_label) => {
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.name = "image-checkbox";
-  checkbox.value = "false";
-  checkbox.id = id;
-
-  const label = document.createElement("label");
-  label.htmlFor = id;
-  label.appendChild(document.createTextNode(custom_label));
-  return [label, checkbox];
-};
-
 const create_star = (id, value) => {
   const star = document.createElement("input");
   star.type = "radio";
@@ -92,59 +81,111 @@ const create_star = (id, value) => {
   return [star, label];
 };
 
-const create_button = () => {
-  const button = document.createElement("button");
-  button.id = "submit";
-  button.classList += "button";
-  button.innerHTML = "Submit";
-  button.onclick = async () => {
-    let ss_checkbox = document.getElementById("ss-chkbox");
-    let tf_included = document.getElementById("bug-description").value;
-    let response = await submit_bug_report(
-      lab_data["label"],
-      lab_data["labName"],
-      lab_data["phase"],
-      lab_data["expName"],
-      ss_checkbox.checked ? b64 : false,
-      tf_included ? tf_included : false
-    );
-    console.log("Response is: " + response);
-    if (response.status) {
-      if (response.status === 200 || response.status === 201)
-        alert("Bug report submitted successfully");
-    } else {
-      alert("Bug report failed to submit, PLease try again");
+const check_Submission = () => {
+  const starIDs = ["star-a", "star-b", "star-c", "star-d", "star-e"];
+  let i;
+  for (i = 0; i < 5; i++) {
+    const minStar = document.getElementById(starIDs[i]);
+    if (minStar.checked) {
+      console.log("Yes good");
+      return true;
     }
+  }
+  return false;
+};
+
+const recordRating = () => {
+  const starIDs = ["star-a", "star-b", "star-c", "star-d", "star-e"];
+  const starValues = ["5", "4", "3", "2", "1"];
+  let i;
+  for (i = 0; i < 5; i++) {
+    let element = document.getElementById(starIDs[i]);
+    if (element.checked) {
+      ratingValue = starValues[i];
+      break;
+    }
+  }
+
+  const userEngagementEvent = {
+    event: "userEngagement",
+    eventCategory: "rating",
+    eventAction: "Aim",
+    eventLabel: "merge-sort",
+    eventValue: ratingValue,
+  };
+  // dataLayer.push(userEngagementEvent);
+  // return false;
+};
+
+const cancelRating = () => {
+  const starIDs = ["star-a", "star-b", "star-c", "star-d", "star-e"];
+  let i;
+  for (i = 0; i < 5; i++) {
+    let element = document.getElementById(starIDs[i]);
+    element.checked = false;
+  }
+};
+
+const clearModal = () => {
+  document.getElementById("user-message").innerHTML = "Thanks for Rating us!";
+  document.getElementById("star-div").style.display = "none";
+  document.getElementById("button-div").style.display = "none";
+};
+
+const create_cancel_button = () => {
+  const button = document.createElement("button");
+  button.id = "cancel-button";
+  button.innerHTML = "Cancel";
+  button.classList += "button";
+  button.onclick = () => {
+    console.log("CLicked Cancel");
     modal_div.style.display = "none";
+    cancelRating();
   };
   return button;
 };
 
-// const create_text_field = () => {
-//   const tf = document.createElement("textarea");
-//   tf.cols = 50;
-//   tf.rows = 10;
-//   tf.id = "bug-description";
-//   tf.placeholder = "Please enter bug description if any";
-//   return tf;
-// };
+const create_submit_button = () => {
+  const button = document.createElement("button");
+  button.id = "submit-button";
+  button.classList += "button";
+  button.innerHTML = "Submit";
+  button.onclick = async () => {
+    check_Submission();
+    if (check_Submission()) {
+      recordRating();
+      clearModal();
+      console.log("Rating of ", ratingValue);
+    }
+  };
+  return button;
+};
 
 const add_deps = () => {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.type = "text/css";
-  link.href =
+  const link1 = document.createElement("link");
+  link1.rel = "stylesheet";
+  link1.type = "text/css";
+  link1.href =
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
-  document.head.appendChild(link);
-  const script = document.createElement("script");
-  script.src =
-    "https://rawcdn.githack.com/vjspranav/vleads-bug-report/2def0aae0804156d78c5aa24a8e7101c704a2dbf/client/html2canvas.js";
-  document.head.appendChild(script);
+  document.head.appendChild(link1);
+
+  const link2 = document.createElement("link");
+  link2.rel = "stylesheet";
+  link2.type = "text/css";
+  link2.href = "./app.css";
+  document.head.appendChild(link2);
+
+  const meta = document.createElement("meta");
+  meta.name = "viewport";
+  meta.content = "width=device-width, initial-scale=1.0";
+  document.head.appendChild(meta);
 };
 
 const add_modal_box = () => {
   modal_div.classList += "modal";
-  document.getElementById("rating").appendChild(modal_div);
+  if (document.getElementById("rating-page")) {
+    document.getElementById("rating-page").appendChild(modal_div);
+  }
 };
 
 const roundHalf = (num) => {
@@ -195,26 +236,34 @@ const display_rating = (rating, cls) => {
 const populate_modal = () => {
   const modal_content = document.createElement("div");
   modal_content.classList += "modal-content";
+
+  const header = document.createElement("div");
+  header.classList += "rating-header";
+
+  const logo = document.createElement("img");
+  logo.src = "./images/vlabs-color-small-moe.jpg";
   const close_button = document.createElement("span");
 
-  // const tf = create_text_field();
   close_button.innerHTML = "&times;";
   close_button.classList += "close";
   close_button.onclick = () => {
     modal_div.style.display = "none";
+    cancelRating();
   };
+  header.appendChild(logo);
+  header.appendChild(close_button);
+  modal_content.appendChild(header);
+
   let data = document.createElement("p");
-  data.innerHTML = "Rate the experiment component!";
-  modal_content.appendChild(close_button);
+  data.id = "user-message";
+  data.innerHTML = "Rate the page!";
+
   modal_content.appendChild(data);
   modal_div.appendChild(modal_content);
-  // modal_content.appendChild(ss_checkbox);
-  // modal_content.appendChild(ss_label);
-  // image_container.id = "image-cotainer";
-  // modal_content.appendChild(image_container);
-  // modal_content.appendChild(tf);
+
   const star_div = document.createElement("div");
   star_div.classList += "star-div";
+  star_div.id = "star-div";
   const starIDs = ["star-a", "star-b", "star-c", "star-d", "star-e"];
   const starValues = ["5", "4", "3", "2", "1"];
   let i;
@@ -224,53 +273,70 @@ const populate_modal = () => {
     star_div.appendChild(label);
   }
   modal_content.appendChild(star_div);
-  modal_content.appendChild(create_button());
+  const button_div = document.createElement("div");
+  button_div.classList += "button-div";
+  button_div.id = "button-div";
+  button_div.appendChild(create_submit_button());
+  button_div.appendChild(create_cancel_button());
+  modal_content.appendChild(button_div);
 };
 
-const add_display_box = () => {
-  const button_div = document.getElementById("rating");
-  const component_rating_div = display_rating(compRating, "component-rating");
-  const experiment_rating_div = display_rating(expRating, "experiment-rating");
-  const experiment_heading = document.createElement("h3");
-  experiment_heading.innerHTML = "Experiment Rating";
-  button_div.appendChild(experiment_heading);
-  button_div.appendChild(experiment_rating_div);
-  const component_heading = document.createElement("h3");
-  component_heading.innerHTML = "Component Rating";
-  button_div.appendChild(component_heading);
-  button_div.appendChild(component_rating_div);
-  const button = document.createElement("button");
-  button.id = "rating-button";
-  button.innerHTML = "Rate this component";
-  button_div.appendChild(button);
-  button.onclick = () => {
-    // var canvas = document.createElement("canvas");
-    // // canvas.scale = 0.3;
-    // var opts = {
-    //   // canvas: canvas,
-    //   logging: true,
-    //   useCORS: true,
-    // };
-    // html2canvas(document.body, opts).then(function (canvas) {
-    //   canvas.id = "image-canva";
-    //   image_container.innerHTML = "";
-    //   image_container.appendChild(canvas);
-    //   let dataURL = canvas.toDataURL();
-    //   b64 = dataURL.split(",")[1];
-    // });
-    modal_div.style.display = "block";
-    get_lab_data();
-    console.log(lab_data);
-  };
+const display_rating_lab = () => {
+  if (document.getElementById("rating-lab")) {
+    const button_div = document.getElementById("rating-lab");
+    const lab_rating_div = display_rating(labRating, "lab-rating");
+    const lab_heading = document.createElement("h3");
+    lab_heading.innerHTML = "Lab Rating";
+    button_div.appendChild(lab_heading);
+    button_div.appendChild(lab_rating_div);
+  }
+};
+
+const display_rating_experiment = () => {
+  if (document.getElementById("rating-experiment")) {
+    const button_div = document.getElementById("rating-experiment");
+    const experiment_rating_div = display_rating(
+      expRating,
+      "experiment-rating"
+    );
+    const experiment_heading = document.createElement("h3");
+    experiment_heading.innerHTML = "Experiment Rating";
+    button_div.appendChild(experiment_heading);
+    button_div.appendChild(experiment_rating_div);
+  }
+};
+
+const display_rating_page = () => {
+  if (document.getElementById("rating-page")) {
+    const button_div = document.getElementById("rating-page");
+    const component_rating_div = display_rating(compRating, "component-rating");
+
+    const component_heading = document.createElement("h3");
+    component_heading.innerHTML = "Rating";
+    button_div.appendChild(component_heading);
+    button_div.appendChild(component_rating_div);
+    const button = document.createElement("button");
+    button.id = "rating-button";
+    button.innerHTML = "Rate";
+    button_div.appendChild(button);
+    button.onclick = () => {
+      modal_div.style.display = "flex";
+      get_lab_data();
+      console.log(lab_data);
+    };
+  }
 };
 
 window.onclick = function (event) {
   if (event.target == modal_div) {
     modal_div.style.display = "none";
+    cancelRating();
   }
 };
 
 add_deps();
 add_modal_box();
-add_display_box();
+display_rating_lab();
+display_rating_experiment();
+display_rating_page();
 populate_modal();
