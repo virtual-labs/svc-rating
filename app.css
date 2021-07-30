@@ -24,6 +24,10 @@
   background-color: #a9a9a9;
 }
 
+#rating-button {
+  margin-top: 1rem;
+}
+
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
