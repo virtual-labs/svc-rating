@@ -1,74 +1,53 @@
 "use_strict";
 
 const modal_div = document.createElement("div");
-// const image_container = document.createElement("div");
-let b64 = "";
-let lab_data = {};
 
-let expRating = 2.44;
-let compRating = 1.3;
-let labRating = 3.6;
+let expRating;
+let pageRating;
+let labRating;
 let ratingValue;
+let expName;
+let learningUnit;
+let taskName;
 
-async function postData(url = "", data = {}) {
-  const response = await fetch(url, {
-    method: "POST",
-    // mode: "no-co rs",
-    cache: "no-cache",
-    headers: {
-      "X-Api-Key": "wBtn7JUmMYalFiBXKgS0mCvJ6iU3qtK60yAYrG10",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response;
-  // return response.json(); // parses JSON response into native JavaScript objects
+const expSheetURL =
+  "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet2!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
+
+const pageSheetURL =
+  "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet1!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
+
+function getPageData() {
+  const metas = document.getElementsByTagName("meta");
+
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute("name") === "experiment_short_name") {
+      expName = metas[i].getAttribute("content");
+    } else if (metas[i].getAttribute("name") === "learning_unit") {
+      learningUnit = metas[i].getAttribute("content");
+    } else if (metas[i].getAttribute("name") === "task_name") {
+      taskName = metas[i].getAttribute("content");
+    }
+  }
+  console.log("experimentName", expName);
+  console.log("TaskName", taskName);
+  console.log("LUName", learningUnit);
 }
 
-const submit_bug_report = async (
-  college,
-  labname,
-  phase,
-  expname,
-  img = false,
-  description = false
-) => {
-  const data = {
-    college,
-    labname,
-    phase,
-    expname,
-    img,
-    description,
-  };
-  console.log(
-    "Submitting bug report: \ncollege: " +
-      college +
-      "\nlabname: " +
-      labname +
-      "\nphase: " +
-      phase +
-      "\nexpname: " +
-      expname +
-      "\nimg: " +
-      (img ? true : img) +
-      "\ndescription: " +
-      description
-  );
-  let response = await postData(
-    (url = "https://uyvac0qyuh.execute-api.us-east-2.amazonaws.com/test/"),
-    data
-  );
-  console.log(response);
-  return response;
-};
+async function getRating(url, name) {
+  const resp = await fetch(url);
+  let data = await resp.json();
 
-const get_lab_data = () => {
-  lab_data["labName"] = dataLayer[0]["labName"];
-  lab_data["label"] = dataLayer[0]["college"];
-  lab_data["phase"] = dataLayer[0]["phase"];
-  lab_data["expName"] = dataLayer[0]["expName"];
-};
+  let pageData;
+  pageData = data["values"];
+
+  for (let i = 0; i < pageData.length; i++) {
+    if (pageData[i][0] === name) {
+      console.log(pageData);
+      console.log(pageRating);
+      return pageData[i][1];
+    }
+  }
+}
 
 const create_star = (id, value) => {
   const star = document.createElement("input");
@@ -87,7 +66,7 @@ const check_Submission = () => {
   for (i = 0; i < 5; i++) {
     const minStar = document.getElementById(starIDs[i]);
     if (minStar.checked) {
-      console.log("Yes good");
+      console.log("Stars Selected");
       return true;
     }
   }
@@ -102,18 +81,26 @@ const recordRating = () => {
     let element = document.getElementById(starIDs[i]);
     if (element.checked) {
       ratingValue = starValues[i];
+      sessionStorage.setItem("UserRating", ratingValue);
+      console.log(
+        "sessionrating Update: ",
+        sessionStorage.getItem("UserRating")
+      );
       break;
     }
   }
+};
 
+const submitRating = () => {
   const userEngagementEvent = {
     event: "userEngagement",
     eventCategory: "rating",
-    eventAction: "Aim",
-    eventLabel: "merge-sort",
-    eventValue: ratingValue,
+    eventAction: taskName,
+    eventLabel: learningUnit,
+    eventValue: sessionStorage.getItem("UserRating"),
   };
-  // dataLayer.push(userEngagementEvent);
+  console.log("Submitted a rating of: ", sessionStorage.getItem("UserRating"));
+  dataLayer.push(userEngagementEvent);
   // return false;
 };
 
@@ -132,13 +119,18 @@ const clearModal = () => {
   document.getElementById("button-div").style.display = "none";
 };
 
+const setModal = () => {
+  document.getElementById("user-message").innerHTML = "Rate the page!";
+  document.getElementById("star-div").style.display = "flex";
+  document.getElementById("button-div").style.display = "block";
+};
+
 const create_cancel_button = () => {
   const button = document.createElement("button");
   button.id = "cancel-button";
   button.innerHTML = "Cancel";
   button.classList += "button";
   button.onclick = () => {
-    console.log("CLicked Cancel");
     modal_div.style.display = "none";
     cancelRating();
   };
@@ -155,7 +147,6 @@ const create_submit_button = () => {
     if (check_Submission()) {
       recordRating();
       clearModal();
-      console.log("Rating of ", ratingValue);
     }
   };
   return button;
@@ -292,9 +283,10 @@ const display_rating_lab = () => {
   }
 };
 
-const display_rating_experiment = () => {
+async function display_rating_experiment() {
   if (document.getElementById("rating-experiment")) {
     const button_div = document.getElementById("rating-experiment");
+    expRating = await getRating(expSheetURL, expName);
     const experiment_rating_div = display_rating(
       expRating,
       "experiment-rating"
@@ -304,12 +296,14 @@ const display_rating_experiment = () => {
     button_div.appendChild(experiment_heading);
     button_div.appendChild(experiment_rating_div);
   }
-};
+}
 
-const display_rating_page = () => {
+async function display_rating_page() {
   if (document.getElementById("rating-page")) {
     const button_div = document.getElementById("rating-page");
-    const component_rating_div = display_rating(compRating, "component-rating");
+
+    pageRating = await getRating(pageSheetURL, window.location.href);
+    const component_rating_div = display_rating(pageRating, "page-rating");
 
     const component_heading = document.createElement("h3");
     component_heading.innerHTML = "Rating";
@@ -321,21 +315,25 @@ const display_rating_page = () => {
     button_div.appendChild(button);
     button.onclick = () => {
       modal_div.style.display = "flex";
-      get_lab_data();
-      console.log(lab_data);
     };
   }
-};
+}
 
 window.onclick = function (event) {
   if (event.target == modal_div) {
     modal_div.style.display = "none";
     cancelRating();
+    setModal();
   }
+};
+
+window.onbeforeunload = function () {
+  submitRating();
 };
 
 add_deps();
 add_modal_box();
+getPageData();
 display_rating_lab();
 display_rating_experiment();
 display_rating_page();
