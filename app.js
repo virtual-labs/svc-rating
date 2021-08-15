@@ -246,6 +246,7 @@ const populate_modal = () => {
   close_button.onclick = () => {
     modal_div.style.display = "none";
     cancelRating();
+    setModal();
   };
   header.appendChild(logo);
   header.appendChild(close_button);
@@ -349,10 +350,12 @@ window.onbeforeunload = function () {
   submitRating();
 };
 
-add_deps();
-add_modal_box();
-getPageData();
-display_rating_lab();
-display_rating_experiment();
-display_rating_page();
-populate_modal();
+window.onload = function () {
+  add_deps();
+  add_modal_box();
+  getPageData();
+  display_rating_lab();
+  display_rating_experiment();
+  display_rating_page();
+  populate_modal();
+};
