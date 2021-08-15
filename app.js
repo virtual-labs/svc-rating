@@ -9,12 +9,16 @@ let ratingValue;
 let expName;
 let learningUnit;
 let taskName;
+let labName;
 
 const expSheetURL =
   "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet2!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
 
 const pageSheetURL =
   "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet1!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
+
+const labSheetURL =
+  "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4";
 
 function getPageData() {
   const metas = document.getElementsByTagName("meta");
@@ -26,15 +30,26 @@ function getPageData() {
       learningUnit = metas[i].getAttribute("content");
     } else if (metas[i].getAttribute("name") === "task_name") {
       taskName = metas[i].getAttribute("content");
+    } else if (metas[i].getAttribute("name") === "lab_name") {
+      labName = metas[i].getAttribute("content");
     }
   }
-  console.log("experimentName", expName);
-  console.log("TaskName", taskName);
-  console.log("LUName", learningUnit);
+
+  if (!taskName || !learningUnit) {
+    console.warn(
+      "Experiment credentials missing in the Meta data tag. Rating will not be recorded!"
+    );
+  }
 }
 
 async function getRating(url, name) {
   const resp = await fetch(url);
+
+  if (resp.status != 200) {
+    console.warn("API Error.");
+    return;
+  }
+
   let data = await resp.json();
 
   let pageData;
@@ -42,8 +57,6 @@ async function getRating(url, name) {
 
   for (let i = 0; i < pageData.length; i++) {
     if (pageData[i][0] === name) {
-      console.log(pageData);
-      console.log(pageRating);
       return pageData[i][1];
     }
   }
@@ -66,7 +79,6 @@ const check_Submission = () => {
   for (i = 0; i < 5; i++) {
     const minStar = document.getElementById(starIDs[i]);
     if (minStar.checked) {
-      console.log("Stars Selected");
       return true;
     }
   }
@@ -82,10 +94,6 @@ const recordRating = () => {
     if (element.checked) {
       ratingValue = starValues[i];
       sessionStorage.setItem("UserRating", ratingValue);
-      console.log(
-        "sessionrating Update: ",
-        sessionStorage.getItem("UserRating")
-      );
       break;
     }
   }
@@ -99,9 +107,7 @@ const submitRating = () => {
     eventLabel: learningUnit,
     eventValue: sessionStorage.getItem("UserRating"),
   };
-  console.log("Submitted a rating of: ", sessionStorage.getItem("UserRating"));
   dataLayer.push(userEngagementEvent);
-  // return false;
 };
 
 const cancelRating = () => {
@@ -272,16 +278,21 @@ const populate_modal = () => {
   modal_content.appendChild(button_div);
 };
 
-const display_rating_lab = () => {
+async function display_rating_lab() {
   if (document.getElementById("rating-lab")) {
     const button_div = document.getElementById("rating-lab");
-    const lab_rating_div = display_rating(labRating, "lab-rating");
-    const lab_heading = document.createElement("h3");
-    lab_heading.innerHTML = "Lab Rating";
-    button_div.appendChild(lab_heading);
-    button_div.appendChild(lab_rating_div);
+    labRating = await getRating(labSheetURL, labName);
+    if (labName && labRating) {
+      const lab_rating_div = display_rating(labRating, "lab-rating");
+      const lab_heading = document.createElement("h3");
+      lab_heading.innerHTML = "Lab Rating";
+      button_div.appendChild(lab_heading);
+      button_div.appendChild(lab_rating_div);
+    } else {
+      console.warn("Lab credentials missing in the GoogleSheet!");
+    }
   }
-};
+}
 
 async function display_rating_experiment() {
   if (document.getElementById("rating-experiment")) {
@@ -291,10 +302,14 @@ async function display_rating_experiment() {
       expRating,
       "experiment-rating"
     );
-    const experiment_heading = document.createElement("h3");
-    experiment_heading.innerHTML = "Experiment Rating";
-    button_div.appendChild(experiment_heading);
-    button_div.appendChild(experiment_rating_div);
+    if (expName && expRating) {
+      const experiment_heading = document.createElement("h3");
+      experiment_heading.innerHTML = "Experiment Rating";
+      button_div.appendChild(experiment_heading);
+      button_div.appendChild(experiment_rating_div);
+    } else {
+      console.warn("Experiment credentials missing in the GoogleSheet!");
+    }
   }
 }
 
@@ -304,11 +319,14 @@ async function display_rating_page() {
 
     pageRating = await getRating(pageSheetURL, window.location.href);
     const component_rating_div = display_rating(pageRating, "page-rating");
-
-    const component_heading = document.createElement("h3");
-    component_heading.innerHTML = "Rating";
-    button_div.appendChild(component_heading);
-    button_div.appendChild(component_rating_div);
+    if (pageRating) {
+      const component_heading = document.createElement("h3");
+      component_heading.innerHTML = "Rating";
+      button_div.appendChild(component_heading);
+      button_div.appendChild(component_rating_div);
+    } else {
+      console.warn("Page credentials missing in the GoogleSheet!");
+    }
     const button = document.createElement("button");
     button.id = "rating-button";
     button.innerHTML = "Rate";
