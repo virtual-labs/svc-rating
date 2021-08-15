@@ -18,7 +18,7 @@ const pageSheetURL =
   "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet1!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
 
 const labSheetURL =
-  "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4";
+  "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
 
 function getPageData() {
   const metas = document.getElementsByTagName("meta");
@@ -36,7 +36,7 @@ function getPageData() {
   }
 
   if (!taskName || !learningUnit) {
-    console.warn(
+    console.error(
       "Experiment credentials missing in the Meta data tag. Rating will not be recorded!"
     );
   }
@@ -46,7 +46,7 @@ async function getRating(url, name) {
   const resp = await fetch(url);
 
   if (resp.status != 200) {
-    console.warn("API Error.");
+    console.error("API Error.");
     return;
   }
 
@@ -289,7 +289,7 @@ async function display_rating_lab() {
       button_div.appendChild(lab_heading);
       button_div.appendChild(lab_rating_div);
     } else {
-      console.warn("Lab credentials missing in the GoogleSheet!");
+      console.error("Lab credentials missing in the GoogleSheet!");
     }
   }
 }
@@ -308,7 +308,7 @@ async function display_rating_experiment() {
       button_div.appendChild(experiment_heading);
       button_div.appendChild(experiment_rating_div);
     } else {
-      console.warn("Experiment credentials missing in the GoogleSheet!");
+      console.error("Experiment credentials missing in the GoogleSheet!");
     }
   }
 }
@@ -325,7 +325,7 @@ async function display_rating_page() {
       button_div.appendChild(component_heading);
       button_div.appendChild(component_rating_div);
     } else {
-      console.warn("Page credentials missing in the GoogleSheet!");
+      console.error("Page credentials missing in the GoogleSheet!");
     }
     const button = document.createElement("button");
     button.id = "rating-button";
