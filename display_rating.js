@@ -84,7 +84,7 @@ export class DisplayRating extends LitElement {
   }
   constructor() {
     super();
-    this._numberOfStars = 0;
+    this._numberOfStars = 5;
     this._title = "Rating";
     this._rating = 5;
     this._roundRating = Math.round(2 * this._rating) / 2;
