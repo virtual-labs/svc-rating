@@ -39,7 +39,7 @@ export class RatingModal extends LitElement {
       }
       .modal {
         display: none;
-        position: fixed;
+        position: absolute;
         z-index: 1;
         left: 0;
         top: 0;
@@ -52,13 +52,15 @@ export class RatingModal extends LitElement {
         align-items: center;
       }
       .modal-content {
+        position: relative;
+        top: 1px;
+        right: 1px;
         background-color: #fefefe;
         padding: 20px;
         border: 1px solid #888;
-        width: fit-content;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         align-items: center;
         border-radius: 14px;
       }
@@ -89,7 +91,11 @@ export class RatingModal extends LitElement {
       .rating-header > img {
         height: 48px;
       }
-
+      .rating-button {
+        position: absolute;
+        top: 100px;
+        right: 100px;
+      }
       #submit-button {
         margin-right: 1rem;
       }
@@ -125,13 +131,7 @@ export class RatingModal extends LitElement {
   constructor() {
     super();
     this.title = "Rating";
-    const fa = document.createElement("link");
-    fa.rel = "stylesheet";
-    fa.type = "text/css";
-    fa.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
-    document.head.appendChild(fa);
-
+  
     this.experiment_rating = 4.5;
     this.lab_rating = 4.5;
   }
@@ -144,25 +144,29 @@ export class RatingModal extends LitElement {
         <div class="rating-experiment">
           <h3>Experiment Rating</h3>
         </div>
-        <div class="modal">
-          <div class="modal-content">
-            <div class="rating-header">
-              <img src="./images/logo.jpg" />
-              <span class="close" @click=${this.close}>&times;</span>
-            </div>
-            <h1 id="title">${this.title}</h1>
-            <div class="rating-div">
-              <rating-element></rating-element>
-            </div>
-            <div class="button-div">
-              <button id="submit-button" @click=${this.handleSubmit}>
-                Submit
-              </button>
-              <button id="cancel-button" @click=${this.close}>Cancel</button>
+        <div>
+          <div class="modal">
+            <div class="modal-content">
+              <div class="rating-header">
+                <img src="./images/logo.jpg" />
+                <span class="close" @click=${this.close}>&times;</span>
+              </div>
+              <h1 id="title">${this.title}</h1>
+              <div class="rating-div">
+                <rating-element rating="6"></rating-element>
+              </div>
+              <div class="button-div">
+                <button id="submit-button" @click=${this.handleSubmit}>
+                  Submit
+                </button>
+                <button id="cancel-button" @click=${this.close}>Cancel</button>
+              </div>
             </div>
           </div>
+          <button class="rating-button" id="rating-button" @click=${this.open}>
+            Rate Experiment
+          </button>
         </div>
-        <button id="rating-button" @click=${this.open}>Rate Experiment</button>
       </div>
     `;
   }
