@@ -10,12 +10,11 @@ export class DisplayRating extends LitElement {
         }
         .fa-star-o {
           color: #ffb931;
-
         }
-        
       `,
     ];
   }
+
   static get properties() {
     return {
       numberOfStars: {
@@ -36,6 +35,12 @@ export class DisplayRating extends LitElement {
       halfStars: {
         type: Number,
       },
+      experimentURL: {
+        type: String,
+      },
+      experimentName: {
+        type: String,
+      },
     };
   }
   set rating(newRating) {
@@ -50,6 +55,34 @@ export class DisplayRating extends LitElement {
     }
     console.log(this._fullStars, this._halfStars);
     this.requestUpdate();
+  }
+  async get_rating(url, field) {
+    const response = await fetch(url);
+
+    if (response.status !== 200) {
+      console.log("Ehhhhhh Something Went Wrong !!");
+      return;
+    }
+    const data = await response.json();
+    console.log(data);
+    const values = data.values;
+    console.log(values.length);
+    for (let i = 0; i < values.length; i++) {
+      if (values[i][0] === field) {
+        console.log("hey");
+        this.rating = values[i][1];
+
+        return;
+      }
+    }
+  }
+  connectedCallback() {
+    super.connectedCallback();
+    console.log("connected");
+    this.get_rating(
+      "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet2!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8",
+      "determination-molar-mass"
+    );
   }
   get fullStars() {
     return this._fullStars;
@@ -118,7 +151,7 @@ export class DisplayRating extends LitElement {
     ) {
       stars.push(html`<span class="fa fa-star-o"></span>`);
     }
-    console.log(stars);
+    console.log(this.rating);
     return html`<div>
       <h3>${this.title}</h3>
       <div class="star-div">${stars}</div>
