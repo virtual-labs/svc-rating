@@ -1,4 +1,6 @@
 import { LitElement, css, html } from "lit-element";
+//  import event
+
 export class RatingModal extends LitElement {
   static get styles() {
     return css`
@@ -114,24 +116,29 @@ export class RatingModal extends LitElement {
   close() {
     this.shadowRoot.querySelector(".modal").style.display = "none";
   }
+  handleSubmit(e) {
+    e.preventDefault();
 
-  handleClick() {
-    console.log("OK");
-    this.dispatchEvent(new CustomEvent("button-click"));
-    this.close();
+    const data = {
+      rating: this.experiment_rating,
+      lab_rating: this.lab_rating,
+      data: "some data",
+    };
+    const myEvent = new CustomEvent("submit-rating", {
+      detail: data,
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(myEvent);
   }
   static properties = {
     text: { type: String },
     experiment_rating: { type: Number },
     lab_rating: { type: Number },
   };
-  createRating(elementId, rating) {
-    const element = this.shadowRoot.querySelector(elementId);
-  }
   constructor() {
     super();
     this.title = "Rating";
-  
     this.experiment_rating = 4.5;
     this.lab_rating = 4.5;
   }
@@ -144,7 +151,9 @@ export class RatingModal extends LitElement {
         <div class="rating-experiment">
           <h3>Experiment Rating</h3>
         </div>
+        <display-rating> </display-rating>
         <div>
+          <my-listener></my-listener>
           <div class="modal">
             <div class="modal-content">
               <div class="rating-header">

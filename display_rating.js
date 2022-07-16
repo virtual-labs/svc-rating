@@ -79,10 +79,21 @@ export class DisplayRating extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log("connected");
-    this.get_rating(
-      "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet2!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8",
-      "determination-molar-mass"
-    );
+    this.get_rating(this.experimentURL, this.experimentName);
+  }
+  get experimentURL() {
+    return this._experimentURL;
+  }
+  set experimentURL(url) {
+    this._experimentURL = url;
+    this.requestUpdate();
+  }
+  get experimentName() {
+    return this._experimentName;
+  }
+  set experimentName(newVal) {
+    this._experimentName = newVal;
+    this.requestUpdate();
   }
   get fullStars() {
     return this._fullStars;
@@ -118,8 +129,11 @@ export class DisplayRating extends LitElement {
   constructor() {
     super();
     this._numberOfStars = 5;
-    this._title = "Rating";
+    this._title = "";
     this._rating = 5;
+    this.experimentURL =
+      "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
+    this.experimentName = "Physical Chemistry";
     this._roundRating = Math.round(2 * this._rating) / 2;
     if (this._roundRating % 1 === 0) {
       this._fullStars = this._roundRating;
@@ -141,7 +155,7 @@ export class DisplayRating extends LitElement {
       stars.push(html`<span class="fa fa-star checked"></span>`);
     }
     for (let i = 0; i < this._halfStars; i++) {
-      stars.push(html`<span class="fa fa-star-half checked"></span>`);
+      stars.push(html`<span class="fa fa-star-half"></span>`);
     }
     console.log(this._numberOfStars, this._fullStars, this._halfStars);
     for (
