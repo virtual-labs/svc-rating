@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "lit": "^2.2.5",
+    "lit-fontawesome": "^0.1.3",
+    "lit-modal": "^1.2.38"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "es-dev-server --app-component index.html --node-resolve --watch --open"
+  },
+  "devDependencies": {
+    "es-dev-server": "^2.1.0"
+  }
+}
