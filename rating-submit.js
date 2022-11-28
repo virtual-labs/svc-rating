@@ -141,7 +141,7 @@ export class RatingModal extends LitElement {
       lab_rating: this.lab_rating,
       data: "some data",
     };
-    const myEvent = new CustomEvent("submit-rating", {
+    const myEvent = new CustomEvent("vl-rating-submit", {
       detail: data,
       bubbles: true,
       composed: true,

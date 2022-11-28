@@ -128,11 +128,8 @@ export class DisplayRating extends LitElement {
   }
   constructor() {
     super();
-    this._numberOfStars = 5;
-    this._title = "";
+    this._numberOfStars = 10;
     this._rating = 5;
-    this.experimentURL =
-      "https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
     this.experimentName = "Physical Chemistry";
     this._roundRating = Math.round(2 * this._rating) / 2;
     if (this._roundRating % 1 === 0) {
