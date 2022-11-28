@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
 import Fontawesome from "lit-fontawesome";
 export class DisplayRating extends LitElement {
   static get styles() {
@@ -173,4 +173,4 @@ export class DisplayRating extends LitElement {
   }
 }
 
-customElements.define("display-rating", DisplayRating);
+customElements.define("rating-display", DisplayRating);

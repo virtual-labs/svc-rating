@@ -8,3 +8,11 @@
 - import the js file "display_rating.js" as `<script type="module" src="display_rating.js"></script>` in your html head , along with the style sheet `<link rel="stylesheet" href="node_modules/lit-fontawesome/css/font.css" />`.
 - use the web component by suppliying it with the parameters like `<display_rating title=<title> numberOfStars=<numberOfStars> rating=<rating>></display_rating>`
 - By default 5 is the number of stars , you can supply a fraction rating and it will round up to nearest half to display the rating
+
+
+"""
+self note : 
+Separate the components into multiple components and change their naming convention so that becomes more explicit,
+1. display component
+2. capturing the rating component
+"""

@@ -26,7 +26,6 @@ class MyListener extends LitElement {
           console.log(e);
         }}
       >
-        Hey!!
       </div>
     `;
   }
