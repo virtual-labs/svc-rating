@@ -128,7 +128,7 @@ export class DisplayRating extends LitElement {
   }
   constructor() {
     super();
-    this._numberOfStars = 10;
+    this._numberOfStars = 5;
     this._rating = 5;
     this.experimentName = "Physical Chemistry";
     this._roundRating = Math.round(2 * this._rating) / 2;

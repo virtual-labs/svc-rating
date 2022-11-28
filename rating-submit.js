@@ -149,15 +149,23 @@ export class RatingModal extends LitElement {
     this.dispatchEvent(myEvent);
   }
   static properties = {
+    title : {type : String},
     text: { type: String },
     experiment_rating: { type: Number },
     lab_rating: { type: Number },
   };
   constructor() {
     super();
-    this.title = "Rating";
+    
     this.experiment_rating = 4.5;
     this.lab_rating = 4.5;
+  }
+  get title() {
+    return this._title;
+  }
+  set title(title) {
+    this._title = title;
+    this.requestUpdate();
   }
   render() {
     return html`
