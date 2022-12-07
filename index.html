@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <script type="module" src="./index.js"></script>
+    <script type = "text/javascript" src="./config.js"></script>
     <link rel="stylesheet" href="node_modules/lit-fontawesome/css/font.css" />
     <title>Document</title>
   </head>
@@ -11,6 +12,14 @@
     <rating-submit >
     </rating-submit>
     <rating-display 
-    experimentURL="https://sheets.googleapis.com/v4/spreadsheets/1lwvnf2zXlSjIu-wI6eG0uSa-cWfRk3nX6mPS5Yn2PIs/values/Sheet3!A:B?key=AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8" ></rating-display>
+  
+      spreadsheetID="1azCik_ei7pR8cePq8l6ELEPt-iOyrl9QChTx8zdulEc"
+      sheetName="Rating-Experiments"
+      columnName="Experiment Short Name"
+      columnValue="physics"
+    >
+    </rating-display>
   </body>
+  <script async defer src="https://apis.google.com/js/api.js"
+></script>
 </html>

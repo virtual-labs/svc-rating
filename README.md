@@ -25,7 +25,8 @@ The following are the features of the rating web-component:
     - The title of the rating modal could be varied, and passed as parameter along the component.
     example usage: 
         `<rating-submit title="<some title>"></rating-submit>`
-
+- **rating-input** : 
+    The 
 # Events 
 
 - on submitting the rating, an event named `vl-rating-submit` is created, that is later captured by the GA4 analytics, and later stored into the google sheet.

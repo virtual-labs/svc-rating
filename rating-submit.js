@@ -1,6 +1,5 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
 //  import event
-
 export class RatingModal extends LitElement {
   static get styles() {
     return css`
@@ -179,7 +178,7 @@ export class RatingModal extends LitElement {
               </div>
                <h1 id="title">${this.title}</h1>
                <div class="rating-div">
-                 <rating-element rating="6"></rating-element>
+                 <rating-element rating="5"></rating-element>
                </div>
               <div class="button-div">
                 <button id="submit-button" @click=${this.handleSubmit}>
@@ -190,7 +189,7 @@ export class RatingModal extends LitElement {
             </div>
           </div>
           <button class="v-button rating-button" id="rating-button" @click=${this.open}>
-            Rate Experiment
+            Rate Me
           </button>
       </div>
     `;
