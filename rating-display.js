@@ -3,19 +3,28 @@
   html,
   css,
 } from "https://unpkg.com/lit-element/lit-element.js?module";
-import Fontawesome from "lit-fontawesome";
+
+// import Fontawesome from "lit-fontawesome";
 import "./config";
 export class DisplayRating extends LitElement {
   static get styles() {
     return [
-      Fontawesome,
+      // Fontawesome,
       css`
+        .star-images{
+        
+          width: 25px;
+          float: left;
+          overflow: hidden;
+        }
         .fa::before {
           color: #ffb931;
         }
         .fa-star-o {
           color: #ffb931;
         }
+      
+
       `,
     ];
   }
@@ -200,21 +209,22 @@ export class DisplayRating extends LitElement {
     }
     const fa = document.createElement("link");
     fa.rel = "stylesheet";
-    fa.type = "text/css";
+    fa.type = "text/javascript";
     fa.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+      "https://unpkg.com/fontawesome@5.6.3/index.js";
     document.head.appendChild(fa);
   }
   render() {
     console.log(this._fullStars, this._halfStars);
     const stars = [];
     for (let i = 0; i < this._fullStars; i++) {
-      stars.push(html`<span class="fa fa-star checked"></span>`);
-      // stars.push(html`<input type="radio"></input>`)
+      // stars.push(html`<span class="fa fa-star checked"></span>`);
+      stars.push(html`<img src="./images/star.svg" class="star-images"></img>
+      `)
     }
     for (let i = 0; i < this._halfStars; i++) {
-      stars.push(html`<span class="fa fa-star-half"></span>`);
-      // stars.push(html`<input type="radio"></input>`)
+      // stars.push(html`<span class="fa fa-star-half"></span>`);
+      stars.push(html`<img src="./images/half-star.svg" class="star-images"></img>`)
     }
     console.log(this._numberOfStars, this._fullStars, this._halfStars);
     for (
