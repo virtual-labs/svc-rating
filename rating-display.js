@@ -1,21 +1,17 @@
-  import {
+import {
   LitElement,
   html,
   css,
 } from "https://unpkg.com/lit-element/lit-element.js?module";
 
-// import Fontawesome from "lit-fontawesome";
-import "./config";
+const googleApiKey = "AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
+const timeLimit = 4 * 60 * 60 * 1000;
 export class DisplayRating extends LitElement {
   static get styles() {
     return [
-      // Fontawesome,
       css`
-        .star-images{
-        
+        .star-images {
           width: 25px;
-          float: left;
-          overflow: hidden;
         }
         .fa::before {
           color: #ffb931;
@@ -23,8 +19,6 @@ export class DisplayRating extends LitElement {
         .fa-star-o {
           color: #ffb931;
         }
-      
-
       `,
     ];
   }
@@ -73,46 +67,82 @@ export class DisplayRating extends LitElement {
     };
   }
   // function too fetch the rating data from the google sheet
+  parse_local_storage_object(object, key) {
+    // function to parse the local storage object and return the rating data
+    //  returns a dictionary with timeFetched and rating
+    if (object === null) {
+      return null;
+    }
+    const parsedObject = JSON.parse(object);
+    if (parsedObject[key] === undefined) {
+      return null;
+    }
 
+    const newObject = {
+      timeFetched: parsedObject.timeFetched,
+      rating: parsedObject["rating"][key],
+    };
+    return newObject;
+  }
   async get_rating() {
     //  get the rating data from the experiment from local storage
+    console.log("Getting the rating....", this.columnValue);
+    const key = this.columnValue;
+
+    const dataObject = this.parse_local_storage_object(
+      localStorage.getItem("vl_data"),
+      key
+    );
+
     const rating = localStorage.getItem(this.columnValue);
     // see the time threshold for the rating data
     const timeFetched = localStorage.getItem("timeFetched");
     const currentTime = new Date().getTime();
     //  caching
     if (
-      rating !== null &&
-      timeFetched !== null &&
+      dataObject !== null &&
+      dataObject.rating !== null &&
+      dataObject.rating !== undefined &&
+      timeFetched.timeFetched !== null &&
+      timeFetched.timeFetched !== undefined &&
       currentTime - timeFetched < timeLimit
     ) {
       // set the rating data
-      this.rating = rating;
+      this.rating = dataObject.rating;
       return;
     } else {
       // need to make a request to the backend and save the data into the local storage of the browser
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetID}/values/${this.sheetName}!A:E?key=${googleApiKey}`;
       try {
+        console.log("Fetching the data");
+        console.log(url);
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
         const data = await response.json();
         console.log(data);
         const values = data.values;
         //  get the column index of the column name
         const colIndex = values[0].indexOf(this.columnName);
-        const ratingIndex = values[0].indexOf('Rating');
+        const ratingIndex = values[0].indexOf("Rating");
         console.log("Col Index is ", colIndex);
-        // go over the entire fetched data and cache it for next reference 
+        // go over the entire fetched data and cache it for next reference
+        const vl_data = {};
+        vl_data["rating"] = {};
+
         for (let i = 1; i < values.length; i++) {
-          localStorage.setItem(values[i][colIndex], values[i][ratingIndex]);
-          
+          vl_data["rating"][values[i][colIndex]] = values[i][ratingIndex];
           if (values[i][colIndex] === this.columnValue) {
             // set the rating for the current display
             this.rating = values[i][ratingIndex];
           }
         }
         //  update the time fetched
-        localStorage.setItem("timeFetched", new Date().getTime());
+        vl_data["timeFetched"] = new Date().getTime();
+        localStorage.setItem("vl_data", JSON.stringify(vl_data));
       } catch {
+        this.rating = 0;
         console.log("Something went wrong");
       }
     }
@@ -121,6 +151,7 @@ export class DisplayRating extends LitElement {
   // the connectedCallback() method is called
   connectedCallback() {
     super.connectedCallback();
+    console.log("Connected Callback");
     this.get_rating(this.experimentURL, this.experimentName);
   }
   // get and set methods for the properties
@@ -149,7 +180,7 @@ export class DisplayRating extends LitElement {
     this._columnValue = value;
     this.requestUpdate();
   }
-  get columnName() {
+  get columnValue() {
     return this._columnValue;
   }
   get fullStars() {
@@ -199,8 +230,8 @@ export class DisplayRating extends LitElement {
   //  constructor
   constructor() {
     super();
-   this._numberOfStars = 5;
-  if (this._roundRating % 1 === 0) {
+    this._numberOfStars = 5;
+    if (this._roundRating % 1 === 0) {
       this._fullStars = this._roundRating;
       this._halfStars = 0;
     } else {
@@ -210,8 +241,7 @@ export class DisplayRating extends LitElement {
     const fa = document.createElement("link");
     fa.rel = "stylesheet";
     fa.type = "text/javascript";
-    fa.href =
-      "https://unpkg.com/fontawesome@5.6.3/index.js";
+    fa.href = "https://unpkg.com/fontawesome@5.6.3/index.js";
     document.head.appendChild(fa);
   }
   render() {
@@ -219,12 +249,14 @@ export class DisplayRating extends LitElement {
     const stars = [];
     for (let i = 0; i < this._fullStars; i++) {
       // stars.push(html`<span class="fa fa-star checked"></span>`);
-      stars.push(html`<img src="./images/star.svg" class="star-images"></img>
-      `)
+      stars.push(html`<img src="http://localhost:5500/images/star.svg" class="star-images"></img>
+      `);
     }
     for (let i = 0; i < this._halfStars; i++) {
       // stars.push(html`<span class="fa fa-star-half"></span>`);
-      stars.push(html`<img src="./images/half-star.svg" class="star-images"></img>`)
+      stars.push(
+        html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
+      );
     }
     console.log(this._numberOfStars, this._fullStars, this._halfStars);
     for (
@@ -232,7 +264,9 @@ export class DisplayRating extends LitElement {
       i < this._numberOfStars - this._fullStars - this._halfStars;
       i++
     ) {
-      stars.push(html`<span class="fa fa-star-o"></span>`);
+      stars.push(
+        html`<img style="width:25px;height:23.84px;" src="http://localhost:5500/images/empty-star.svg" class="star-images"></img>`
+      );
       // stars.push(html`<input name="star" type="radio"></input>`)
     }
     console.log(this.rating);
