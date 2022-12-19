@@ -5,7 +5,8 @@ This repository contains the source code for the rating web component for virtua
 
 The rating component is further split into the following components:
 
-1. **`rating-display`** : This component has the display of the submitted rating as `stars`, it reads the data from the google sheet using the sheet API. 
+1. **`rating-display`** : This component has the display of the submitted rating as `stars `,it reads the data from the google sheet using the sheet API.
+
 2. **`rating-submit`** : This packs the Rate experiment button and the rating-modal, which could be placed on the experiment page and which is used for collecting the rating of the web component, and submits the rating to the google analytics, and gets stored into the google sheets.
 
 ## Features 
@@ -19,17 +20,53 @@ The following are the features of the rating web-component:
 
         `<rating-display experimentURL=<your sheet API url>></rating-display>`
     - using the above specified method the star rating could be encorporated at the desired place.
+    - The following parameters are to be supplied to the rating-display web component : 
+
+        1. **numberOfStars** : 
+        
+            The number of stars to display the rating out of.
+        2. **spreadsheetID** : 
+
+            The id of the spreadsheet to read the rating from.
+        3. sheetName : 
+
+            The name of the sheet, to read rating from in the spreadsheet.
+        4. columnName :
+
+            The column-name, to read-rating from.
+
+        5. columnValue :
+
+            The unique identifier, whose rating is to be displayed. Say, in case of experiments, it is the experiment short name.
+
+        Following is the sample usage :
+
+        
+        `<rating-display 
+        spreadsheetID="1azCik_ei7pR8cePq8l6ELEPt-iOyrl9QChTx8zdulEc"
+        sheetName="Rating-Experiments"
+        columnName="Experiment Short Name"
+        columnValue="physics">`
+
+    The positioning of the stars could be adjusted, by placing the component into a div and adjusting the div's position accordingly. The component being placed relative to the corresponding div.
+
 - **rating-submit** : 
+    The rating submit component, comprises of a button, which on clicking opens up a modal for submitting the rating from the user.
     The `rating-submit` buttons comes with the following parameters : 
-    - The number of stars could be varied depending on the use case, by default it being set to 5
-    - The title of the rating modal could be varied, and passed as parameter along the component.
+        
+    1. **title** : The title to be displayed on the rating modal.
+
+        - The title of the rating modal could be varied, and passed as parameter along the component.
     example usage: 
         `<rating-submit title="<some title>"></rating-submit>`
-- **rating-input** : 
-    The 
-# Events 
+        - Sample Usage : 
+        `<rating-submit>
+         </rating-submit>`
+
+  # Events 
 
 - on submitting the rating, an event named `vl-rating-submit` is created, that is later captured by the GA4 analytics, and later stored into the google sheet.
+
 <!-- # Rating Web Component 
 
 - A rating web component built using lit.js 
