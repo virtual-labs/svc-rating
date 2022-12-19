@@ -62,7 +62,7 @@ export class RatingModal extends LitElement {
         background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Facebook_Like_button.svg/1024px-Facebook_Like_button.svg.png);
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 30px;
+        background-size: 50px;
         border-radius: 50%;
       }
 
