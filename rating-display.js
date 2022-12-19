@@ -113,6 +113,9 @@ export class DisplayRating extends LitElement {
     } else {
       // need to make a request to the backend and save the data into the local storage of the browser
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetID}/values/${this.sheetName}!A:E?key=${googleApiKey}`;
+      const vl_data = {};
+      vl_data["rating"] = {};
+
       try {
         console.log("Fetching the data");
         console.log(url);
@@ -128,9 +131,7 @@ export class DisplayRating extends LitElement {
         const ratingIndex = values[0].indexOf("Rating");
         console.log("Col Index is ", colIndex);
         // go over the entire fetched data and cache it for next reference
-        const vl_data = {};
-        vl_data["rating"] = {};
-
+      
         for (let i = 1; i < values.length; i++) {
           vl_data["rating"][values[i][colIndex]] = values[i][ratingIndex];
           if (values[i][colIndex] === this.columnValue) {
@@ -145,6 +146,11 @@ export class DisplayRating extends LitElement {
         this.rating = 0;
         console.log("Something went wrong");
       }
+      console.log("Rating is ", this.rating);
+      if (vl_data["rating"] === {}) {
+        console.log("Something went wrong");
+        this.rating = 0;
+      }
     }
   }
   // as soon as the web component is loaded into the browser window
@@ -152,6 +158,7 @@ export class DisplayRating extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log("Connected Callback");
+    this.rating = 0;
     this.get_rating(this.experimentURL, this.experimentName);
   }
   // get and set methods for the properties
