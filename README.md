@@ -63,6 +63,10 @@ The following are the features of the rating web-component:
         `<rating-submit>
          </rating-submit>`
 
+  # Changing of building environments
+    
+    - 
+    - 
   # Events 
 
 - on submitting the rating, an event named `vl-rating-submit` is created, that is later captured by the GA4 analytics, and later stored into the google sheet.

@@ -11,7 +11,11 @@ export class DisplayRating extends LitElement {
     return [
       css`
         .star-images {
-          width: 25px;
+          width: 22px;
+        }
+       
+        .empty-star{
+          margin:0px 3px;
         }
         .fa::before {
           color: #ffb931;
@@ -131,7 +135,7 @@ export class DisplayRating extends LitElement {
         const ratingIndex = values[0].indexOf("Rating");
         console.log("Col Index is ", colIndex);
         // go over the entire fetched data and cache it for next reference
-      
+
         for (let i = 1; i < values.length; i++) {
           vl_data["rating"][values[i][colIndex]] = values[i][ratingIndex];
           if (values[i][colIndex] === this.columnValue) {
@@ -272,7 +276,7 @@ export class DisplayRating extends LitElement {
       i++
     ) {
       stars.push(
-        html`<img style="width:25px;height:23.84px;" src="http://localhost:5500/images/empty-star.svg" class="star-images"></img>`
+        html`<img src="http://localhost:5500/images/empty-star.svg" class="star-images empty-star"></img>`
       );
       // stars.push(html`<input name="star" type="radio"></input>`)
     }
