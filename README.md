@@ -64,12 +64,30 @@ The following are the features of the rating web-component:
          </rating-submit>`
 
   # Changing of building environments
+  The rating components are included in the following files in the <a href="">ph-3</a> repository, for including it into the experiment and lab pages. These could be changed, or tweaked as per convinence : 
+
+    1. **config.json [`LAB`]**  - include the js modules in the `list-of-experiments-ctnt` object, which should be changed accordingly if the links get updated.
+
+    2. **plugin-config-production.js and plugin-config-testing.js** - same as above, but for, loading the modules for experiment pages.
+
+    3. **list-of-experiments-ctnt.handlebars** : this file in the page-templates folder, encloses the display rating component for the lab-list-of-experiments pages.
     
-    - 
-    - 
+    - Directory : './templates/partials/'
+    4. **content.handlebars** 
+    5. **header.handlebars**
+    6. **simulation-header.handlebars**
+
+    The tags above have been included in the conditional **testing** environment using the if clause 
+    ```js
+            {{# if testing}}
+                //rating component
+            {{/if}}
+    ```
+    to include it into production, removing/changing the clause should be done in each of the files, wherever the component needs to be included.
   # Events 
 
 - on submitting the rating, an event named `vl-rating-submit` is created, that is later captured by the GA4 analytics, and later stored into the google sheet.
+- The event is handled and managed in the file `./templates/assets/js/event-handler.js` file, wherein the event is created and pushed to the data layer for further analytics.
 
 <!-- # Rating Web Component 
 
