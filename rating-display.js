@@ -4,8 +4,11 @@ import {
   css,
 } from "https://unpkg.com/lit-element/lit-element.js?module";
 
-const googleApiKey = "AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8";
-const timeLimit = 4 * 60 * 60 * 1000;
+/* ----------------------------------------------------------------- */
+const googleApiKey = "AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8"; // Google API Key
+const timeLimit = 4 * 60 * 60 * 1000; // time limit for the rating data to be cached
+/* ----------------------------------------------------------------- */
+
 export class DisplayRating extends LitElement {
   static get styles() {
     return [
@@ -13,9 +16,9 @@ export class DisplayRating extends LitElement {
         .star-images {
           width: 22px;
         }
-       
-        .empty-star{
-          margin:0px 3px;
+
+        .empty-star {
+          margin: 0px 3px;
         }
         .fa::before {
           color: #ffb931;
@@ -259,14 +262,17 @@ export class DisplayRating extends LitElement {
     console.log(this._fullStars, this._halfStars);
     const stars = [];
     for (let i = 0; i < this._fullStars; i++) {
-      // stars.push(html`<span class="fa fa-star checked"></span>`);
-      stars.push(html`<img src="http://localhost:5500/images/star.svg" class="star-images"></img>
-      `);
+      stars.push(
+        html`<img src="./images/star.svg" class="star-images"></img>`
+        // html`<img src="http://localhost:5500/images/star.svg" class="star-images"></img>`
+      );
     }
     for (let i = 0; i < this._halfStars; i++) {
       // stars.push(html`<span class="fa fa-star-half"></span>`);
       stars.push(
-        html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
+        html`<img src="./images/half-star.svg" class="star-images"></img>`
+   
+        // html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
       );
     }
     console.log(this._numberOfStars, this._fullStars, this._halfStars);
@@ -276,7 +282,9 @@ export class DisplayRating extends LitElement {
       i++
     ) {
       stars.push(
-        html`<img src="http://localhost:5500/images/empty-star.svg" class="star-images empty-star"></img>`
+        html`<img src="./images/empty-star.svg" class="star-images empty-star"></img>`
+    
+        // html`<img src="http://localhost:5500/images/empty-star.svg" class="star-images empty-star"></img>`
       );
       // stars.push(html`<input name="star" type="radio"></input>`)
     }
