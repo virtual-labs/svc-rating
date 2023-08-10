@@ -9,9 +9,9 @@ class MyListener extends LitElement {
     window.addEventListener("submit-rating", this.onSubmitRating);
   }
   onSubmitRating(e) {
-    console.log(e);
+    console.debug(e);
     alert(e.detail.data);
-    console.log("submit-rating", e.detail);
+    console.debug("submit-rating", e.detail);
   }
 
   constructor() {
@@ -23,7 +23,7 @@ class MyListener extends LitElement {
     return html`
       <div
         @submit-rating=${(e) => {
-          console.log(e);
+          console.debug(e);
         }}
       >
       </div>

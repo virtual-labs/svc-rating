@@ -81,7 +81,7 @@ export class RatingElement extends LitElement {
   }
   handleClick(e) {
     this.checked = e.target.value;
-    console.log(e.target.id);
+    console.debug(e.target.id);
   }
 
   constructor() {

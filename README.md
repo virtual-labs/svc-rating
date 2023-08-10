@@ -7,7 +7,7 @@ The rating component is further split into the following components:
 
 1. **`rating-display`** : This component has the display of the submitted rating as `stars `,it reads the data from the google sheet using the sheet API.
 
-2. **`rating-submit`** : This packs the Rate experiment button and the rating-modal, which could be placed on the experiment page and which is used for collecting the rating of the web component, and submits the rating to the google analytics, and gets stored into the google sheets.
+2. **`rating-submit`** : This packs the Rate experiment button and the rating-modal, which could be placed on the experiment page and which is used for collecting the rating of the web component, and submits the rating to the google analytics, and gets stored into the google analytics.
 
 ## Features 
 

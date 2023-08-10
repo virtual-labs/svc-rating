@@ -93,7 +93,7 @@ export class DisplayRating extends LitElement {
   }
   async get_rating() {
     //  get the rating data from the experiment from local storage
-    console.log("Getting the rating....", this.columnValue);
+    console.debug("Getting the rating....", this.columnValue);
     const key = this.columnValue;
 
     const dataObject = this.parse_local_storage_object(
@@ -107,11 +107,9 @@ export class DisplayRating extends LitElement {
     const currentTime = new Date().getTime();
     //  caching
     if (
-      dataObject !== null &&
-      dataObject.rating !== null &&
-      dataObject.rating !== undefined &&
-      timeFetched.timeFetched !== null &&
-      timeFetched.timeFetched !== undefined &&
+      dataObject &&
+      dataObject.rating &&
+      timeFetched &&
       currentTime - timeFetched < timeLimit
     ) {
       // set the rating data
@@ -124,19 +122,19 @@ export class DisplayRating extends LitElement {
       vl_data["rating"] = {};
 
       try {
-        console.log("Fetching the data");
-        console.log(url);
+        console.debug("Fetching the data");
+        console.debug(url);
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("HTTP error " + response.status);
         }
         const data = await response.json();
-        console.log(data);
+        console.debug(data);
         const values = data.values;
         //  get the column index of the column name
         const colIndex = values[0].indexOf(this.columnName);
         const ratingIndex = values[0].indexOf("Rating");
-        console.log("Col Index is ", colIndex);
+        console.debug("Col Index is ", colIndex);
         // go over the entire fetched data and cache it for next reference
 
         for (let i = 1; i < values.length; i++) {
@@ -151,11 +149,11 @@ export class DisplayRating extends LitElement {
         localStorage.setItem("vl_data", JSON.stringify(vl_data));
       } catch {
         this.rating = 0;
-        console.log("Something went wrong");
+        console.debug("Something went wrong");
       }
-      console.log("Rating is ", this.rating);
+      console.debug("Rating is ", this.rating);
       if (vl_data["rating"] === {}) {
-        console.log("Something went wrong");
+        console.debug("Something went wrong");
         this.rating = 0;
       }
     }
@@ -164,7 +162,7 @@ export class DisplayRating extends LitElement {
   // the connectedCallback() method is called
   connectedCallback() {
     super.connectedCallback();
-    console.log("Connected Callback");
+    console.debug("Connected Callback");
     this.rating = 0;
     this.get_rating(this.experimentURL, this.experimentName);
   }
@@ -212,7 +210,7 @@ export class DisplayRating extends LitElement {
     this.requestUpdate();
   }
   set rating(newRating) {
-    console.log("New Rating is ", newRating);
+    console.debug("New Rating is ", newRating);
     this._rating = newRating;
     this._roundRating = Math.round(2 * newRating) / 2;
     if (this._roundRating % 1 === 0) {
@@ -222,7 +220,7 @@ export class DisplayRating extends LitElement {
       this._fullStars = Math.floor(this._roundRating);
       this._halfStars = 1;
     }
-    console.log(this._fullStars, this._halfStars);
+    console.debug(this._fullStars, this._halfStars);
     this.requestUpdate();
   }
   get rating() {
@@ -259,7 +257,7 @@ export class DisplayRating extends LitElement {
     document.head.appendChild(fa);
   }
   render() {
-    console.log(this._fullStars, this._halfStars);
+    console.debug(this._fullStars, this._halfStars);
     const stars = [];
     for (let i = 0; i < this._fullStars; i++) {
       stars.push(
@@ -275,7 +273,7 @@ export class DisplayRating extends LitElement {
         // html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
       );
     }
-    console.log(this._numberOfStars, this._fullStars, this._halfStars);
+    console.debug(this._numberOfStars, this._fullStars, this._halfStars);
     for (
       let i = 0;
       i < this._numberOfStars - this._fullStars - this._halfStars;
@@ -288,7 +286,7 @@ export class DisplayRating extends LitElement {
       );
       // stars.push(html`<input name="star" type="radio"></input>`)
     }
-    console.log(this.rating);
+    console.debug(this.rating);
     return html`<div>
       <h3>${this.title}</h3>
       <div class="star-div">${stars}</div>
