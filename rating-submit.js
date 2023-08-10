@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
-import { imageData } from "./imageData";
+import { imageData } from "./imageData.js";
 //  import event
 export class SubmitRating extends LitElement {
   static get styles() {

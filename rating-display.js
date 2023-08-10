@@ -152,7 +152,7 @@ export class DisplayRating extends LitElement {
         console.debug("Something went wrong");
       }
       console.debug("Rating is ", this.rating);
-      if (vl_data["rating"] === {}) {
+      if (vl_data["rating"] == {}) {
         console.debug("Something went wrong");
         this.rating = 0;
       }
