@@ -1,4 +1,7 @@
-import { LitElement, html } from "lit";
+import {
+  LitElement,
+  html,
+} from "https://unpkg.com/lit-element/lit-element.js?module";
 
 class MyListener extends LitElement {
   static properties = {

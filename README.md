@@ -15,11 +15,6 @@ The following are the features of the rating web-component:
 
 - **rating-display** : 
     - the `rating-display` component could be used separately for displaying the rating of the given experiment,
-    - the sheet api url could be specified as `experimentURL` alongside the given component as shown, 
-    example usage: 
-
-        `<rating-display experimentURL=<your sheet API url>></rating-display>`
-    - using the above specified method the star rating could be encorporated at the desired place.
     - The following parameters are to be supplied to the rating-display web component : 
 
         1. **numberOfStars** : 
