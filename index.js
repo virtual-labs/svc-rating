@@ -1,6 +1,6 @@
 import "./rating.js";
-import "./modal";
-import "./display_rating"
-import "./checkEventSubmission";
+import "./rating-submit.js";
+import "./rating-display.js"
+import "./checkEventSubmission.js";
 
 

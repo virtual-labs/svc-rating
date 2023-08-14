@@ -1,15 +1,14 @@
-import { LitElement, css, html } from "lit-element";
+import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
+import { imageData } from "./imageData.js";
 //  import event
-
-export class RatingModal extends LitElement {
+export class SubmitRating extends LitElement {
   static get styles() {
     return css`
       :host {
         font-family: Arial, Helvetica, sans-serif;
       }
-
+      
       #submit-button,
-      #rating-button,
       #cancel-button {
         border: none;
         color: #ffffff;
@@ -53,6 +52,37 @@ export class RatingModal extends LitElement {
         justify-content: center;
         align-items: center;
       }
+      .vl-mobile-rating-button{
+        position: fixed;
+        bottom : 80px;
+        right : 20px;
+        z-index: 1;
+        font-size: 0;
+        border: none;
+        padding: 25px;
+        background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Facebook_Like_button.svg/1024px-Facebook_Like_button.svg.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50px;
+        border-radius: 50%;
+      }
+
+      @media (min-width: 992px) {
+        .vl-mobile-rating-button{
+          display: none;
+        }
+        .rating-button{
+          display: block;
+        }
+      }
+      @media (max-width: 992px) {
+        .rating-button{
+          display: none;
+        }
+        .vl-mobile-rating-button{
+          display: block;
+        }
+      }
       .modal-content {
         position: relative;
         top: 1px;
@@ -74,6 +104,10 @@ export class RatingModal extends LitElement {
       .fa {
         color: orange;
       }
+      .modal {
+        display: none;
+        height: 100vh;
+      }
       .rating-div {
         display: flex;
         justify-content: center;
@@ -94,9 +128,23 @@ export class RatingModal extends LitElement {
         height: 48px;
       }
       .rating-button {
-        position: absolute;
-        top: 100px;
-        right: 100px;
+        position: inherit;
+        border-radius: 1em;
+        padding: 0.6em 1.2em;
+        margin: 15px 0px;
+        font-size: 1.05rem;
+        border: none;
+        color: #ffffff;
+        background-color: #288ec8;
+        text-align: center;
+        font-size: 1.05rem;
+        border-radius: 1em;
+        padding: 0.76em 1.2em;
+        cursor: pointer;
+        
+      }
+      .rating-button:hover {
+        background-color: #288ec8;
       }
       #submit-button {
         margin-right: 1rem;
@@ -120,11 +168,11 @@ export class RatingModal extends LitElement {
     e.preventDefault();
 
     const data = {
+      rating_name : this.rating_name,
       rating: this.experiment_rating,
       lab_rating: this.lab_rating,
-      data: "some data",
     };
-    const myEvent = new CustomEvent("submit-rating", {
+    const myEvent = new CustomEvent("vl-rating-submit", {
       detail: data,
       bubbles: true,
       composed: true,
@@ -132,38 +180,47 @@ export class RatingModal extends LitElement {
     this.dispatchEvent(myEvent);
   }
   static properties = {
+    rating_name:{type: String},
+    title : {type : String},
     text: { type: String },
     experiment_rating: { type: Number },
     lab_rating: { type: Number },
   };
   constructor() {
     super();
-    this.title = "Rating";
+    this.rating_name = "NULL";
     this.experiment_rating = 4.5;
     this.lab_rating = 4.5;
+  }
+  get rating_name() {
+    return this._rating_name;
+  }
+  set rating_name(rating_name) {
+    this._rating_name = rating_name;
+    // console.debug("New Rating Nammeeee",this._rating_name);
+    this.requestUpdate();
+  }
+  get title() {
+    return this._title;
+  }
+  set title(title) {
+    this._title = title;
+    this.requestUpdate();
   }
   render() {
     return html`
       <div class="rating-page">
-        <div class="rating-lab">
-          <h3>Lab Rating</h3>
-        </div>
-        <div class="rating-experiment">
-          <h3>Experiment Rating</h3>
-        </div>
-        <display-rating> </display-rating>
-        <div>
-          <my-listener></my-listener>
-          <div class="modal">
+    
+          <div class=" modal">
             <div class="modal-content">
               <div class="rating-header">
-                <img src="./images/logo.jpg" />
+              <img src="${imageData}" />
                 <span class="close" @click=${this.close}>&times;</span>
               </div>
-              <h1 id="title">${this.title}</h1>
-              <div class="rating-div">
-                <rating-element rating="6"></rating-element>
-              </div>
+               <h1 id="title">${this.title}</h1>
+               <div class="rating-div">
+                 <rating-element rating="5"></rating-element>
+               </div>
               <div class="button-div">
                 <button id="submit-button" @click=${this.handleSubmit}>
                   Submit
@@ -172,13 +229,15 @@ export class RatingModal extends LitElement {
               </div>
             </div>
           </div>
-          <button class="rating-button" id="rating-button" @click=${this.open}>
-            Rate Experiment
+          <button class="v-button rating-button" id="rating-button" @click=${this.open}>
+            Rate Me
           </button>
-        </div>
+          <button class="vl-mobile-rating-button" id="rating-button" @click=${this.open}>
+            Rate Me
+          </button>
       </div>
     `;
   }
 }
 
-customElements.define("rating-modal", RatingModal);
+customElements.define("rating-submit", SubmitRating);

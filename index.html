@@ -2,14 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script type="module" src="index.js"></script>
-    <link rel="stylesheet" href="node_modules/lit-fontawesome/css/font.css" />
+    <script type="module" src="./index.js"></script>
+    <script type = "text/javascript" src="./config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <title>Document</title>
   </head>
   <body>
-    <!-- <simple-greeting></simple-greeting> -->
-    <rating-modal></rating-modal>
-    <!-- <rating-element ></rating-element> -->
-    <display-rating ></display-rating>
+    <!-- <simple-greeting></simpl-greeting> -->
+    <rating-submit
+    title="my-title" >
+    </rating-submit>
+    <rating-display 
+      spreadsheetID="1azCik_ei7pR8cePq8l6ELEPt-iOyrl9QChTx8zdulEc"
+      sheetName="Rating-Experiments"
+      columnName="Experiment Short Name"
+      columnValue="physics"
+    >
+    </rating-display>
+    <script async src="https://apis.google.com/js/api.js"
+  ></script>
   </body>
 </html>

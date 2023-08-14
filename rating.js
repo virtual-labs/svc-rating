@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
 
 export class RatingElement extends LitElement {
   static styles = css`
@@ -81,7 +81,7 @@ export class RatingElement extends LitElement {
   }
   handleClick(e) {
     this.checked = e.target.value;
-    console.log(e.target.id);
+    console.debug(e.target.id);
   }
 
   constructor() {
