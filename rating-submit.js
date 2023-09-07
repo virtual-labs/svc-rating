@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element/lit-element.js?module";
 import { imageData } from "./imageData.js";
 //  import event
+
 export class SubmitRating extends LitElement {
   static get styles() {
     return css`
@@ -40,18 +41,18 @@ export class SubmitRating extends LitElement {
       }
       .modal {
         display: none;
-        position: absolute;
+        position: fixed;
         z-index: 1;
-        left: 0;
         top: 0;
-        width: 100%;
-        height: 100%;
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
         overflow: auto;
-        background-color: rgb(0, 0, 0);
         background-color: rgba(0, 0, 0, 0.4);
-        justify-content: center;
+        justify-content: right;
         align-items: center;
       }
+      
       .vl-mobile-rating-button{
         position: fixed;
         bottom : 80px;
@@ -95,6 +96,7 @@ export class SubmitRating extends LitElement {
         /* justify-content: center; */
         align-items: center;
         border-radius: 14px;
+        transform: translate(-100%,-100%);
       }
       .close {
         color: #aaaaaa;
