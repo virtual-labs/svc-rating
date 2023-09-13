@@ -71,6 +71,10 @@ export class DisplayRating extends LitElement {
         // exp_name for experiment rating
         type: String,
       },
+      imagesDirectory: {
+        // the directory where the images are stored
+        type: String,
+      }
     };
   }
   // function too fetch the rating data from the google sheet
@@ -188,6 +192,15 @@ export class DisplayRating extends LitElement {
   get columnName() {
     return this._columnName;
   }
+  set imagesDirectory(directory) {
+    this._imagesDirectory = directory;
+    console.log("Set"+this._imagesDirectory);
+    this.requestUpdate();
+  }
+  get imagesDirectory() {
+    console.log("Get"+this._imagesDirectory);
+    return this._imagesDirectory;
+  }
   set columnValue(value) {
     this._columnValue = value;
     this.requestUpdate();
@@ -261,14 +274,14 @@ export class DisplayRating extends LitElement {
     const stars = [];
     for (let i = 0; i < this._fullStars; i++) {
       stars.push(
-        html`<img src="./images/star.svg" class="star-images"></img>`
+        html`<img src=${this.imagesDirectory}star.svg class="star-images"></img>`
         // html`<img src="http://localhost:5500/images/star.svg" class="star-images"></img>`
       );
     }
     for (let i = 0; i < this._halfStars; i++) {
       // stars.push(html`<span class="fa fa-star-half"></span>`);
       stars.push(
-        html`<img src="./images/half-star.svg" class="star-images"></img>`
+        html`<img src=${this.imagesDirectory}half-star.svg class="star-images"></img>`
    
         // html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
       );
@@ -280,7 +293,7 @@ export class DisplayRating extends LitElement {
       i++
     ) {
       stars.push(
-        html`<img src="./images/empty-star.svg" class="star-images empty-star"></img>`
+        html`<img src=${this.imagesDirectory}empty-star.svg class="star-images empty-star"></img>`
     
         // html`<img src="http://localhost:5500/images/empty-star.svg" class="star-images empty-star"></img>`
       );
