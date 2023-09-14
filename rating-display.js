@@ -121,10 +121,10 @@ export class DisplayRating extends LitElement {
       return;
     } else {
       // need to make a request to the backend and save the data into the local storage of the browser
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetID}/values/${this.sheetName}!A:E?key=${googleApiKey}`;
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetID}/values/${this.sheetName}!A:O?key=${googleApiKey}`;
       const vl_data = {};
       vl_data["rating"] = {};
-
+      console.log("URL", url);
       try {
         console.debug("Fetching the data");
         console.debug(url);
@@ -136,9 +136,8 @@ export class DisplayRating extends LitElement {
         console.debug(data);
         const values = data.values;
         //  get the column index of the column name
-        const colIndex = values[0].indexOf(this.columnName);
-        const ratingIndex = values[0].indexOf("Rating");
-        console.debug("Col Index is ", colIndex);
+        const colIndex = values[1].indexOf(this.columnName);
+        const ratingIndex = values[1].indexOf("Rating");
         // go over the entire fetched data and cache it for next reference
 
         for (let i = 1; i < values.length; i++) {
