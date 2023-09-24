@@ -170,13 +170,10 @@ export class SubmitRating extends LitElement {
     super.connectedCallback();
     // add event listener and extract data
     window.addEventListener("vl-rating-click", this.updateRating.bind(this));
-    console.log("MyListener - Event Listener added for rating-clicked");
   }
 
   updateRating(e){
-    // console.log("Update Rating: ",e.detail);
     this.experiment_rating = e.detail;
-    // console.log("Experiment Rating Updated: ", this.experiment_rating);
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -192,6 +189,7 @@ export class SubmitRating extends LitElement {
       composed: true,
     });
     this.dispatchEvent(myEvent);
+    this.close();
   }
   static properties = {
     rating_name:{type: String},

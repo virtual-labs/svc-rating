@@ -124,7 +124,6 @@ export class DisplayRating extends LitElement {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${this.spreadsheetID}/values/${this.sheetName}!A:O?key=${googleApiKey}`;
       const vl_data = {};
       vl_data["rating"] = {};
-      console.log("URL", url);
       try {
         console.debug("Fetching the data");
         console.debug(url);
@@ -193,11 +192,11 @@ export class DisplayRating extends LitElement {
   }
   set imagesDirectory(directory) {
     this._imagesDirectory = directory;
-    console.log("Set"+this._imagesDirectory);
+    console.debug("Set"+this._imagesDirectory);
     this.requestUpdate();
   }
   get imagesDirectory() {
-    console.log("Get"+this._imagesDirectory);
+    console.debug("Get"+this._imagesDirectory);
     return this._imagesDirectory;
   }
   set columnValue(value) {
