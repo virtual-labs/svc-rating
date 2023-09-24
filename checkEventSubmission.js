@@ -14,7 +14,6 @@ class MyListener extends LitElement {
   onSubmitRating(e) {
     console.debug(e);
     alert(e.detail.data);
-    console.debug("submit-rating", e.detail);
   }
 
   constructor() {
