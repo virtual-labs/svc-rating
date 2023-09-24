@@ -80,8 +80,29 @@ export class RatingElement extends LitElement {
     return this._rating;
   }
   handleClick(e) {
+    console.log("Inside rating element: ", e)
+    // console.log("e.target ", e.target)
     this.checked = e.target.value;
-    console.debug(e.target.id);
+    this._rating = parseInt(e.target.id.split("-")[1]);
+    console.log("this rating inside handleclick: ", this._rating)
+
+    // dispatch event to submit rating from clicked element
+    const data = {
+      rating: this._rating
+    };
+    const clickEvent = new CustomEvent("vl-rating-click", {
+      detail: this._rating,
+      bubbles: true,
+      composed: true,
+    });
+    console.log("My data: ", data);
+    console.log("My event: ", clickEvent);
+    this.dispatchEvent(clickEvent);
+
+    // convert to number
+    // console.log("this checked element: ", this.checked)
+    // console.debug(e.target.id);
+    console.log("id of e target: ", e.target.id)
   }
 
   constructor() {
