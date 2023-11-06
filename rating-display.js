@@ -2,7 +2,7 @@ import {
   LitElement,
   html,
   css,
-} from "https://unpkg.com/lit-element/lit-element.js?module";
+} from "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js";
 
 /* ----------------------------------------------------------------- */
 const googleApiKey = "AIzaSyAJ9pMGaHcmOiNeHEXQLGCiJcr5k3TV4F8"; // Google API Key
