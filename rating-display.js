@@ -135,8 +135,8 @@ export class DisplayRating extends LitElement {
         console.debug(data);
         const values = data.values;
         //  get the column index of the column name
-        const colIndex = values[1].indexOf(this.columnName);
-        const ratingIndex = values[1].indexOf("Rating");
+        const colIndex = values[0].indexOf(this.columnName);
+        const ratingIndex = values[0].indexOf("Rating");
         // go over the entire fetched data and cache it for next reference
 
         for (let i = 1; i < values.length; i++) {
@@ -280,7 +280,7 @@ export class DisplayRating extends LitElement {
       // stars.push(html`<span class="fa fa-star-half"></span>`);
       stars.push(
         html`<img src=${this.imagesDirectory}half-star.svg class="star-images"></img>`
-   
+
         // html`<img src="http://localhost:5500/images/half-star.svg" class="star-images"></img>`
       );
     }
@@ -292,7 +292,7 @@ export class DisplayRating extends LitElement {
     ) {
       stars.push(
         html`<img src=${this.imagesDirectory}empty-star.svg class="star-images empty-star"></img>`
-    
+
         // html`<img src="http://localhost:5500/images/empty-star.svg" class="star-images empty-star"></img>`
       );
       // stars.push(html`<input name="star" type="radio"></input>`)
