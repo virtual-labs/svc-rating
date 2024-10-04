@@ -1,37 +1,85 @@
-# Rating Service Plugin for Rating System of Virtual Lab Experiments.
+# Lit Based Rating Web Component for Virtual Labs
+----
 
-## Requirements for the Plugin
+This repository contains the source code for the rating web component for virtual labs. The web component is written and packaged as a lit component, with some customisable parameters for the web-component.
 
-The Plugin requires 3 empty **divs** with the following class names in the target HTML document that will carry the plugin.
+The rating component is further split into the following components:
 
-- **rating-lab** : the div where the rating of the lab will be displayed
-- **rating-experiment** : the div where the rating of the experiment will be displayed
-- **rating-page** : the div where the rating of the page the user is on at the moment will be displayed
+1. **`rating-display`** : This component has the display of the submitted rating as `stars`, it reads the data from the google sheet using the sheet API.
 
-Apart from these, the plugin also requires information about the page. For this the plugin will look into the **meta** tags of the page. The important information the plugin looks for is the following:
+2. **`rating-submit`** : This packs the Rate experiment button and the rating-modal, which could be placed on the experiment page. It  is used for collecting the rating of the web component, and submitting the rating to the google analytics, and getting stored into the google analytics.
 
-- **lab_name** : Name of the lab, which will be important in displaying the rating of the lab
-- **experiment_short_name** : Name of the experiment, which will be important in displaying the rating of the experiment
-- **learning_unit** : Name of the learning unit or the experiment that the user will be rating
-- **task_name**: Name of the task, i.e., _Aim_, _Theory_, etc. that the user will be rating
+## Features 
 
-The plugin can be used by simple incorporating the js file in the script tag of the HTML doc.
+The following are the features of the rating web-component:
 
-For a sample page that satisfies all requirements, please look at [index.html](./index.html).
+- **rating-display** : 
+    - the `rating-display` component could be used separately for displaying the rating of the given experiment,
+    - The following parameters are to be supplied to the rating-display web component : 
 
-Apart from all the HTML requirements, the developer needs to provide the correct Google Sheets API URLs for their google sheets in the script.
+        1. **numberOfStars** : 
+        
+            The number of stars to display the rating out of.
+        2. **spreadsheetID** : 
 
-## Submission of User Ratings
+            The id of the spreadsheet to read the rating from.
+        3. sheetName : 
 
-The ratings provided by the user are stored using **sessionStorage**. The same rating keeps updating every time the user rates the page. This limits unethical boosting/lowering of ratings by the user to a certain extent.
+            The name of the sheet, to read rating from in the spreadsheet.
+        4. columnName :
 
-The ratings are only recorded when the **beforeunload** is invoked, i.e., when the user is leaving the page. This translates to events in which the user refreshes the page, closes the tab, or closes the entire browser window.
+            The column-name, to read-rating from.
 
-## Error Handling
+        5. columnValue :
 
-The following erroneous scenarios have been taken care of by the script:
+            The unique identifier, whose rating is to be displayed. Say, in case of experiments, it is the experiment short name or in case of labs, it is the lab name.
 
-- The experiment/lab details are missing in the **meta** tags of the HTML doc
-- The **fetch** request to Google Sheets API returns an error
-- The corresponding lab/experiment/page credentials do not exist in the mentioned Google Sheet
-- The experiment details that are necessary for recording the rating are missing
+        Following is the sample usage :
+
+        
+        `<rating-display 
+        spreadsheetID="1azCik_ei7pR8cePq8l6ELEPt-iOyrl9QChTx8zdulEc"
+        sheetName="Exp-Rating-Clean"
+        columnName="Experiment Short Name"
+        columnValue="exp-short-name">`
+
+    The positioning of the stars could be adjusted, by placing the component into a div and adjusting the div's position accordingly. The component being placed relative to the corresponding div.
+
+- **rating-submit** : 
+    The rating submit component, comprises of a button, which on clicking opens up a modal for submitting the rating from the user.
+    The `rating-submit` buttons comes with the following parameters : 
+        
+    1. **title** : The title to be displayed on the rating modal.
+
+        - The title of the rating modal could be varied, and passed as parameter along the component.
+    example usage: 
+        `<rating-submit title="<some title>"></rating-submit>`
+        - Sample Usage : 
+        `<rating-submit>
+         </rating-submit>`
+
+  # Changing of building environments
+  The rating components are included in the following files in the <a href="">ph-3</a> repository, for including it into the experiment and lab pages. These could be changed, or tweaked as per convenience: 
+
+    1. **config.json [`LAB`]**  - include the js modules in the `list-of-experiments-ctnt` object, which should be changed accordingly if the links get updated.
+
+    2. **plugin-config-production.js and plugin-config-testing.js** - same as above, but for, loading the modules for experiment pages.
+
+    3. **list-of-experiments-ctnt.handlebars** : this file in the page-templates folder, encloses the display rating component for the lab-list-of-experiments pages.
+    
+    - Directory : './templates/partials/'
+    4. **content.handlebars** 
+    5. **header.handlebars**
+    6. **simulation-header.handlebars**
+
+    The tags above have been included in the conditional **testing** environment using the if clause 
+    ```js
+            {{# if testing}}
+                //rating component
+            {{/if}}
+    ```
+    to include it into production, removing/changing the clause should be done in each of the files, wherever the component needs to be included.
+  # Events 
+
+- on submitting the rating, an event named `vl-rating-submit` is created, that is later captured by the GA4 analytics, and later stored into the google sheet.
+- The event is handled and managed in the file `./templates/assets/js/event-handler.js` file, wherein the event is created and pushed to the data layer for further analytics.
